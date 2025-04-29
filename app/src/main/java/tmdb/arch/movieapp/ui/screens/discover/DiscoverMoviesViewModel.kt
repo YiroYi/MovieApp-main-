@@ -2,25 +2,27 @@ package tmdb.arch.movieapp.ui.screens.discover
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import tmdb.arch.movieapp.domain.model.Movie
 import tmdb.arch.movieapp.domain.repository.MoviesRepository
+import tmdb.arch.movieapp.domain.useCases.GetLatestMoviesUseCase
+import tmdb.arch.movieapp.utils.UiState
 
-class DiscoverMoviesViewModel(private val service: MoviesRepository): ViewModel() {
-  private val _text = MutableStateFlow("Hello World")
-  val text: StateFlow<String> get() = _text.asStateFlow()
+class DiscoverMoviesViewModel(private val getLatestMoviesUseCase: GetLatestMoviesUseCase) : ViewModel() {
+  private val _movies = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
+  val movies: StateFlow<PagingData<Movie>> get() = _movies.asStateFlow()
 
   init {
     viewModelScope.launch {
-      _text.emit("Hello Android")
-
-      delay(2000)
-
-      _text.emit("Hello world")
-      service.getLatestMovies()
+      getLatestMoviesUseCase()
+        .cachedIn(viewModelScope)
+        .collectLatest(_movies::emit)
     }
   }
 }

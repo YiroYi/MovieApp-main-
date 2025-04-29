@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import tmdb.arch.movieapp.domain.remote.AuthInterceptor
 import tmdb.arch.movieapp.domain.remote.MoviesService
 import tmdb.arch.movieapp.domain.repository.MoviesRepository
 import java.util.concurrent.TimeUnit
@@ -15,6 +16,7 @@ val remoteModule
 
 private val httpClient
   get() = OkHttpClient.Builder()
+    .addInterceptor(AuthInterceptor())
     .callTimeout(30L, TimeUnit.SECONDS)
     .build()
 

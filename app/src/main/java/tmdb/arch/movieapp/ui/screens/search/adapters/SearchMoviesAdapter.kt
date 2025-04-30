@@ -1,17 +1,14 @@
-package tmdb.arch.movieapp.ui.screens.discover.adapters
+package tmdb.arch.movieapp.ui.screens.search.adapters
 
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import tmdb.arch.movieapp.BuildConfig
+import androidx.recyclerview.widget.ListAdapter
 import tmdb.arch.movieapp.databinding.MovieListItemBinding
 import tmdb.arch.movieapp.domain.model.Movie
 import tmdb.arch.movieapp.ui.common.MovieViewHolder
 import tmdb.arch.movieapp.utils.SingleDiffCallback
 import tmdb.arch.movieapp.utils.delegates.viewBinding
 
-class MoviesListAdapter(): PagingDataAdapter<Movie, MovieViewHolder>(SingleDiffCallback<Movie>()) {
+class SearchMoviesAdapter: ListAdapter<Movie, MovieViewHolder>(SingleDiffCallback<Movie>()) {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder =
     MovieViewHolder(
       binding = parent.viewBinding { layoutInflater, viewGroup, _ ->
@@ -25,5 +22,4 @@ class MoviesListAdapter(): PagingDataAdapter<Movie, MovieViewHolder>(SingleDiffC
 
     holder.bind(item)
   }
-
 }
